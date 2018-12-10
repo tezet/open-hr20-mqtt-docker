@@ -1,0 +1,14 @@
+version: '2'
+
+services:
+    # Frontend
+    openhr20:
+        image: tezet/openhr20
+        ports:
+            - '1234:80'
+        volumes:
+            - ${CONFIG}/openhr20:/config
+        devices:
+             - "/dev/ttyUSB0:/dev/ttyUSB0"
+        environment:
+            - TZ

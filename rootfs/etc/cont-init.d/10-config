@@ -1,0 +1,15 @@
+#!/usr/bin/with-contenv bash
+
+s6-echo "Enabling PHP"
+lighty-enable-mod fastcgi 
+lighty-enable-mod fastcgi-php
+service lighttpd reload
+
+if [ ! -f /config/db/openhr20.sqlite ]; then
+    s6-echo "Creating HR20 database"
+    mkdir -p /config/db/
+    php-cgi /hr20/tools/create_db.php
+    chmod a+rwx /config/db/openhr20.sqlite
+    chmod a+rwx /config/db/
+fi
+

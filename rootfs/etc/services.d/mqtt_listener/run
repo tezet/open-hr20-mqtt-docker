@@ -1,0 +1,4 @@
+#!/usr/bin/with-contenv bash
+
+s6-echo "Starting MQTT listener"
+python3 /hr20/tools/hr20_mqtt.py
