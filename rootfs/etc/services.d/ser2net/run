@@ -1,4 +1,0 @@
-#!/usr/bin/with-contenv bash
-
-s6-echo "Starting ser2net"
-ser2net -n -C 4444:raw:0:/dev/ttyUSB0:38400
