@@ -3,7 +3,7 @@ version: '2'
 services:
     openhr20:
         build: .
-        restart: always
+        restart: unless-stopped
         image: tezet/openhr20
         ports:
             - '${HTTP_PORT}:80'
