@@ -5,7 +5,7 @@ FROM tezet/base-arm
 RUN \
 	apt-dpkg-wrap apt-get update && \
 	apt-dpkg-wrap apt-get install -y php-cgi php-cli php-common php-json php-mysql php-readline php-sqlite3 sqlite3 \
-        lighttpd libfcgi-perl  mosquitto-clients python3 python3-pip python3-dev build-essential netbase && \
+        lighttpd ser2net libfcgi-perl  mosquitto-clients python3 python3-pip python3-dev build-essential netbase && \
     pip3 install setuptools wheel && \
 	pip3 install flask flask_mqtt flask_socketio eventlet && \
     apt-cleanup
