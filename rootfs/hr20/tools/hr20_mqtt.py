@@ -13,6 +13,10 @@ import sqlite3
 import datetime
 import time
 import sys
+import threading
+import logging
+
+lock = threading.Lock()
 
 eventlet.monkey_patch()
 
@@ -42,6 +46,7 @@ DB_FILE = '/config/db/openhr20.sqlite'
 
 mqtt = Mqtt(app)
 socketio = SocketIO(app)
+logger = logging.getLogger('mqttlistener')
 
 address = {}
 address['salon'] = 1
@@ -49,22 +54,28 @@ address['sypialnia'] = 2
 address['lazienka'] = 3
 
 
+
 def execute_command(addr, data):
+  with lock:
+    logger.warning("Executing command: " + str(addr) + " " + data)
     try:
       dt = datetime.datetime.now()
       timestamp = int(time.mktime(dt.timetuple()))
       conn = sqlite3.connect(DB_FILE)
       conn.execute("INSERT INTO command_queue (time,addr,data) VALUES (?, ?, ?)", (timestamp, addr, data))
       conn.commit()
-      conn.close()
     except:
-      sys.stderr.write('unable to execute command: ' + str(addr) + " " + data)
+      logger.error('unable to execute command: ' + str(addr) + " " + data)
+    finally:
+      conn.close()
+    logger.warning("Done executing command: " + str(addr) + " " + data)
 
 
 def set_temperature(addr, temp):
     temp = int(2*float(temp))
     command = "A%0.2x" % (temp)
     execute_command(addr, command)
+
     
 def set_mode(addr, mode):
     if mode == 'MANU':
@@ -88,15 +99,15 @@ def handle_mqtt_message(client, userdata, message):
         
         if (command == "temp"):
             temp = data['payload']
-            print("Change wanted temperature on " + device + ": ", temp)
+            logger.info("Change wanted temperature on " + device + ": ", temp)
             set_temperature(dev_address, temp)
             
         if (command == "mode"):
             mode = data['payload']
-            print("Change mode on " + device + ": ", mode)
+            logger.info("Change mode on " + device + ": ", mode)
             set_mode(dev_address, mode)
     else:
-        print("Unknown device address: " + device)
+        logger.error("Unknown device address: " + device)
 
 
 #@mqtt.on_log()
