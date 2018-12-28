@@ -9,5 +9,7 @@ services:
             - '${HTTP_PORT}:80'
         volumes:
             - ${CONFIG}/openhr20:/config
+        devices:
+             - '${SERIAL_PORT}:/dev/ttyUSB0'
         environment:
             - TZ
