@@ -43,9 +43,9 @@ function weights($char) {
 $db = new SQLite3("/config/db/openhr20.sqlite");
 $db->query("PRAGMA synchronous=OFF");
 
-//$fp=fsockopen("127.0.0.1",4444);
+$fp=fsockopen("192.168.1.2",4444);
 //$fp=fopen("php://stdin","r"); 
-$fp=fopen("/dev/ttyUSB0","w+"); 
+//$fp=fopen("/dev/ttyUSB0","w+"); 
 
 //while(($line=stream_get_line($fp,256,"\n"))!=FALSE) {
 
