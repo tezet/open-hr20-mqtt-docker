@@ -1,4 +1,4 @@
 #!/usr/bin/with-contenv bash
 
 s6-echo "Starting OpenHR20 daemon"
-php-cgi /hr20/tools/daemon.php > /dev/null
+/usr/bin/php /hr20/tools/daemon.php > /dev/null
